@@ -1,0 +1,19 @@
+trigger sendCaseWhenClosed on Case (before insert,before update) {
+    
+    for(case cs : trigger.new){
+        if(cs.status == 'Closed'){          
+           // Set the body as a JSON object
+            RequestJSON jsonObj = new RequestJSON ();
+            List<RequestJSON> jsonStrs = new List<RequestJSON>();
+            
+            jsonObj.id = cs.id;
+            jsonObj.agentid = cs.OwnerId;
+          
+            jsonStrs.add(jsonObj);
+            
+            WorkPlace.createStringAndSend(jsonStrs);
+                      
+        }
+        
+    }   
+}

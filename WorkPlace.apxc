@@ -1,0 +1,38 @@
+global class WorkPlace {
+       
+    public static void createStringAndSend(List<RequestJSON> jsonObjs) {
+        String id;
+        String agentid;
+        
+        for (RequestJSON obj : jsonObjs) {            
+            id = obj.id;
+            agentid = obj.agentid;
+            String jsonObj = json.serialize(obj);
+            String jsonBody = json.serialize(jsonObj); 
+            sendData(jsonBody);
+      }           
+    }
+    
+    @future(callout=true)
+  public static void sendData(String jsonbody) {
+      
+      Http http = new Http();
+            HttpRequest request = new HttpRequest();
+            request.setEndpoint('https://nfapihub.herokuapp.com/');
+            request.setMethod('POST');
+            request.setHeader('Content-Type', 'application/json;charset=UTF-8');
+      
+            HttpResponse response = http.send(request);
+            
+            // Parse the JSON response
+            if (response.getStatusCode() != 201) {
+                // if there is error update field in case object so that it can be used
+                // later to process the batch to rerun the callouts again
+            } else {
+                System.debug(response.getBody());
+                // update the case with secretKey
+            } 
+      
+  }
+
+}

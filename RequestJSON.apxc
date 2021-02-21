@@ -1,0 +1,6 @@
+public class RequestJSON {
+    
+    public String id;
+    public String agentid;
+
+}
